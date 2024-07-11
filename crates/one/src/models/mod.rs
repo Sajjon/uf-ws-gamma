@@ -14,3 +14,16 @@ pub fn new_one_default() -> One {
 pub fn new_one(value: Zero) -> One {
     One { value }
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Object)]
+pub struct OneObj {
+    value: Zero,
+}
+
+#[uniffi::export]
+impl OneObj {
+    #[uniffi::constructor]
+    pub fn new_default() -> Self {
+        Self::default()
+    }
+}

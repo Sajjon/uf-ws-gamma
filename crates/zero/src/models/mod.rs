@@ -12,3 +12,21 @@ pub fn new_zero(value: bool) -> Zero {
 pub fn new_zero_default() -> Zero {
     Zero::default()
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Object)]
+pub struct ZeroObj {
+    value: Zero,
+}
+
+#[uniffi::export]
+impl ZeroObj {
+    #[uniffi::constructor]
+    pub fn new_default() -> Self {
+        Self::default()
+    }
+
+    #[uniffi::constructor]
+    pub fn new(value: Zero) -> Self {
+        Self { value }
+    }
+}

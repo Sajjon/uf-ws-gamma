@@ -7,17 +7,18 @@ public func test() throws {
   assert(objectRecord(value: GammaObject.newDefault()) == newRecordDefault())
   assert(recordObject(value: newRecordDefault()) == GammaObject.newDefault())
 
-  do {
-    let r = newRecord(one: newOne(value: newZero(value: true)), two: newTwo(value: true))
-    assert(r == recordRecord(value: r))
-    assert(r == recordRefRecord(value: r))
-  }
+  let v = complexRecord(
+    a: newZeroDefault(),
+    b: newOneDefault(),
+    c: newRecordDefault(),
+    x: ZeroObj.newDefault(),
+    y: OneObj.newDefault(),
+    z: GammaObject.newDefault()
+  )
 
-  do {
-    let o = GammaObject(one: newOne(value: newZero(value: true)), two: newTwo(value: true))
-    assert(o == objectObject(value: o))
-    assert(o == objectRefObject(value: o))
-  }
+  complexObject(
+    value: v
+  )
 
 }
 

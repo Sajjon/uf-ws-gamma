@@ -1,5 +1,6 @@
-use one::One;
+use one::{One, OneObj};
 use std::sync::Arc;
+use zero::{Zero, ZeroObj};
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Two(bool);
@@ -99,4 +100,48 @@ pub fn object_record(value: Arc<GammaObject>) -> GammaRecord {
     let raw = Arc::<GammaObject>::into_raw(value);
     let inner = unsafe { raw.as_ref() }.unwrap().clone();
     GammaRecord::from(inner)
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Record)]
+pub struct ComplexRecord {
+    a: Zero,
+    b: One,
+    c: GammaRecord,
+    x: Arc<ZeroObj>,
+    y: Arc<OneObj>,
+    z: Arc<GammaObject>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Object)]
+pub struct ComplexObject {
+    a: Zero,
+    b: One,
+    c: GammaRecord,
+    x: Arc<ZeroObj>,
+    y: Arc<OneObj>,
+    z: Arc<GammaObject>,
+}
+
+#[uniffi::export]
+pub fn complex_record(
+    a: Zero,
+    b: One,
+    c: GammaRecord,
+    x: Arc<ZeroObj>,
+    y: Arc<OneObj>,
+    z: Arc<GammaObject>,
+) -> ComplexRecord {
+    ComplexRecord { a, b, c, x, y, z }
+}
+
+#[uniffi::export]
+pub fn complex_object(value: ComplexRecord) -> ComplexObject {
+    ComplexObject {
+        a: value.a,
+        b: value.b,
+        c: value.c,
+        x: value.x,
+        y: value.y,
+        z: value.z,
+    }
 }

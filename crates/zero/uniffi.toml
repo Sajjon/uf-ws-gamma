@@ -1,0 +1,4 @@
+namespace = "zero"
+
+[bindings.kotlin]
+package_name = "com.sajjon.zero"

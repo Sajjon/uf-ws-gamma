@@ -1,6 +1,8 @@
+use zero::prelude::*;
+
 #[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Record)]
 pub struct One {
-    value: bool,
+    value: Zero,
 }
 
 #[uniffi::export]
@@ -9,6 +11,6 @@ pub fn new_one_default() -> One {
 }
 
 #[uniffi::export]
-pub fn new_one(value: bool) -> One {
+pub fn new_one(value: Zero) -> One {
     One { value }
 }

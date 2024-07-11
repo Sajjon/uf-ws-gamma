@@ -8,13 +8,13 @@ public func test() throws {
   assert(recordObject(value: newRecordDefault()) == GammaObject.newDefault())
 
   do {
-    let r = newRecord(one: newOne(value: true), two: newTwo(value: true))
+    let r = newRecord(one: newOne(value: newZero(value: true)), two: newTwo(value: true))
     assert(r == recordRecord(value: r))
     assert(r == recordRefRecord(value: r))
   }
 
   do {
-    let o = GammaObject(one: newOne(value: true), two: newTwo(value: true))
+    let o = GammaObject(one: newOne(value: newZero(value: true)), two: newTwo(value: true))
     assert(o == objectObject(value: o))
     assert(o == objectRefObject(value: o))
   }

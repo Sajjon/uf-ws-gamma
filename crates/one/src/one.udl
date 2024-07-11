@@ -1,1 +1,4 @@
 namespace one {};
+
+[ExternalExport="zero"]
+typedef extern Zero;

@@ -1,32 +1,32 @@
 #[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Record)]
-pub struct Zero {
+pub struct ZeroRecord {
     value: bool,
 }
 
 #[uniffi::export]
-pub fn new_zero(value: bool) -> Zero {
-    Zero { value }
+pub fn new_zero(value: bool) -> ZeroRecord {
+    ZeroRecord { value }
 }
 
 #[uniffi::export]
-pub fn new_zero_default() -> Zero {
-    Zero::default()
+pub fn new_zero_default() -> ZeroRecord {
+    ZeroRecord::default()
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Object)]
-pub struct ZeroObj {
-    value: Zero,
+pub struct ZeroObject {
+    value: ZeroRecord,
 }
 
 #[uniffi::export]
-impl ZeroObj {
+impl ZeroObject {
     #[uniffi::constructor]
     pub fn new_default() -> Self {
         Self::default()
     }
 
     #[uniffi::constructor]
-    pub fn new(value: Zero) -> Self {
+    pub fn new(value: ZeroRecord) -> Self {
         Self { value }
     }
 }

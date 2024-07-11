@@ -1,6 +1,5 @@
-use one::{One, OneObj};
+use one::{OneObject, OneRecord, ZeroObject, ZeroRecord};
 use std::sync::Arc;
-use zero::{Zero, ZeroObj};
 
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Two(bool);
@@ -19,129 +18,55 @@ pub fn new_two(value: bool) -> Two {
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Record)]
 pub struct GammaRecord {
-    one: One,
+    zero_record: ZeroRecord,
+    zero_object: Arc<ZeroObject>,
+    one_record: OneRecord,
+    one_object: Arc<OneObject>,
     two: Two,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Object)]
 #[uniffi::export(Eq, Debug)]
 pub struct GammaObject {
-    one: One,
+    zero_record: ZeroRecord,
+    zero_object: Arc<ZeroObject>,
+    one_record: OneRecord,
+    one_object: Arc<OneObject>,
     two: Two,
 }
 
 #[uniffi::export]
 impl GammaObject {
     #[uniffi::constructor]
-    pub fn new_default() -> Self {
-        Self::default()
+    pub fn new(
+        zero_record: ZeroRecord,
+        zero_object: Arc<ZeroObject>,
+        one_record: OneRecord,
+        one_object: Arc<OneObject>,
+        two: Two,
+    ) -> Self {
+        Self {
+            zero_record,
+            zero_object,
+            one_record,
+            one_object,
+            two,
+        }
     }
 
     #[uniffi::constructor]
-    pub fn new(one: One, two: Two) -> Self {
-        Self { one, two }
-    }
-}
-
-impl From<GammaObject> for GammaRecord {
-    fn from(value: GammaObject) -> Self {
-        Self {
-            one: value.one,
-            two: value.two,
-        }
-    }
-}
-impl From<GammaRecord> for GammaObject {
-    fn from(value: GammaRecord) -> Self {
-        Self {
-            one: value.one,
-            two: value.two,
-        }
+    pub fn new_default() -> Self {
+        Self::default()
     }
 }
 
 #[uniffi::export]
-pub fn new_record(one: One, two: Two) -> GammaRecord {
-    GammaRecord { one, two }
-}
-
-#[uniffi::export]
-pub fn new_record_default() -> GammaRecord {
-    GammaRecord::default()
-}
-
-#[uniffi::export]
-pub fn record_ref_record(value: &GammaRecord) -> GammaRecord {
-    value.clone()
-}
-
-#[uniffi::export]
-pub fn record_record(value: GammaRecord) -> GammaRecord {
-    value
-}
-
-#[uniffi::export]
-pub fn object_ref_object(value: &GammaObject) -> GammaObject {
-    value.clone()
-}
-
-#[uniffi::export]
-pub fn object_object(value: Arc<GammaObject>) -> Arc<GammaObject> {
-    value
-}
-
-#[uniffi::export]
-pub fn record_object(value: GammaRecord) -> GammaObject {
-    value.into()
-}
-
-#[uniffi::export]
-pub fn object_record(value: Arc<GammaObject>) -> GammaRecord {
-    let raw = Arc::<GammaObject>::into_raw(value);
-    let inner = unsafe { raw.as_ref() }.unwrap().clone();
-    GammaRecord::from(inner)
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Record)]
-pub struct ComplexRecord {
-    a: Zero,
-    b: One,
-    c: GammaRecord,
-    x: Arc<ZeroObj>,
-    y: Arc<OneObj>,
-    z: Arc<GammaObject>,
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Eq, uniffi::Object)]
-pub struct ComplexObject {
-    a: Zero,
-    b: One,
-    c: GammaRecord,
-    x: Arc<ZeroObj>,
-    y: Arc<OneObj>,
-    z: Arc<GammaObject>,
-}
-
-#[uniffi::export]
-pub fn complex_record(
-    a: Zero,
-    b: One,
-    c: GammaRecord,
-    x: Arc<ZeroObj>,
-    y: Arc<OneObj>,
-    z: Arc<GammaObject>,
-) -> ComplexRecord {
-    ComplexRecord { a, b, c, x, y, z }
-}
-
-#[uniffi::export]
-pub fn complex_object(value: ComplexRecord) -> ComplexObject {
-    ComplexObject {
-        a: value.a,
-        b: value.b,
-        c: value.c,
-        x: value.x,
-        y: value.y,
-        z: value.z,
+pub fn record_to_object(record: GammaRecord) -> GammaObject {
+    GammaObject {
+        zero_record: record.zero_record,
+        zero_object: record.zero_object,
+        one_record: record.one_record,
+        one_object: record.one_object,
+        two: record.two,
     }
 }

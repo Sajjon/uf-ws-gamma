@@ -1,18 +1,20 @@
-> [!IMPORTANT]
-> Python binding tests does not work, I get error:
-> "attempted relative import with no known parent package"
-> However, both Kotlin and Swift bindings tests works.
+> ![IMPORTANT]
+> Uses released UniFFI version `0.28.0`.
+> Working bindings tests in Swift and Kotlin.
 
 # Works
 
-Simple demo of workspace setup with two UniFFI consuming crates:
+Simple demo of workspace setup with three UniFFI consuming crates:
 
+- `zero`
 - `one`
 - `two`
 
 ```sh
-$ cargo tree -i one --format "{lib}"
-one
+$ cargo tree -i zero --format "{lib}"
+zero
+├── one
+│   └── two
 └── two
 ```
 
@@ -58,10 +60,29 @@ direnv allow .
 
 # Design
 
-Crate `one` exports a Rust struct using `uniffi::Record` which is then "imported"
-in crate `two`'s udl file like so:
+Crate `zero` exports two types, one record and one object, which are "imported"
+by crate "one" in UDL:
+
+```webudl
+[ExternalExport="zero"]
+typedef extern ZeroRecord;
+
+[ExternalInterfaceExport="zero"]
+typedef extern ZeroObject;
+```
+
+In turn, crate "one" uses `ZeroRecord` and `ZeroObject` in one record and in one object
+
+Crate "two"'s UDL then "imports" the types from crate "one" (apparently the types from "zero" are "re-exported" automatically, i.e. crate "two" does not need to reference types from "zero" in UDL.):
 
 ```webudl
 [ExternalExport="one"]
-typedef extern One;
+typedef extern OneRecord;
+
+[ExternalInterfaceExport="one"]
+typedef extern OneObject;
 ```
+
+Finally crate "two" declares one record and one object, both containing records
+and objects from "zero", "one" and also newtype declared in "two", for which
+we have working bindings tests in Swift and Kotlin.

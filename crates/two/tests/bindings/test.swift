@@ -1,25 +1,23 @@
 import two
 
 public func test() throws {
-  assert(newRecordDefault() == newRecordDefault())
-  assert(newRecordDefault() == newRecord(one: newOneDefault(), two: newTwoDefault()))
-  assert(GammaObject.newDefault() == GammaObject.newDefault())
-  assert(objectRecord(value: GammaObject.newDefault()) == newRecordDefault())
-  assert(recordObject(value: newRecordDefault()) == GammaObject.newDefault())
 
-  let v = complexRecord(
-    a: newZeroDefault(),
-    b: newOneDefault(),
-    c: newRecordDefault(),
-    x: ZeroObj.newDefault(),
-    y: OneObj.newDefault(),
-    z: GammaObject.newDefault()
+  let record = GammaRecord(
+    zeroRecord: ZeroRecord(value: false),
+    zeroObject: ZeroObject(value: ZeroRecord(value: false)),
+    oneRecord: OneRecord(
+      zeroRecord: ZeroRecord(value: false),
+      zeroObject: ZeroObject(value: ZeroRecord(value: false))
+    ),
+    oneObject: OneObject(
+      one: newOneDefault(),
+      zeroRecord: ZeroRecord(value: false),
+      zeroObject: ZeroObject(value: ZeroRecord(value: false))
+    ),
+    two: newTwo(value: false)
   )
-
-  complexObject(
-    value: v
-  )
-
+  let object = recordToObject(record: record)
+  assert(object == GammaObject.newDefault())
 }
 
 try! test()

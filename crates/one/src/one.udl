@@ -1,4 +1,7 @@
 namespace one {};
 
 [ExternalExport="zero"]
-typedef extern Zero;
+typedef extern ZeroRecord;
+
+[ExternalInterfaceExport="zero"]
+typedef extern ZeroObject;
